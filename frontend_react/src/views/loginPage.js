@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import Navbar from "../components/Navbar";
+
 
 const LoginPage = () => {
   const { loginUser } = useContext(AuthContext);
@@ -12,6 +14,7 @@ const LoginPage = () => {
 
   return (
     <>
+      <Navbar/>
       <div>
         <span>Login</span>      
         <form onSubmit={handleSubmit}>
