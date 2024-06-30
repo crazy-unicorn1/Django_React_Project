@@ -54,7 +54,7 @@ def books_list(request):
     if request.method == 'GET':
         data = Book.objects.all()
         serializer = BookSerializer(data, context={'request': request}, many=True)
-        return Response(serializer.data)
+        return Response({'response': serializer.data}, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = BookSerializer(data=request.data)
         if serializer.is_valid():
