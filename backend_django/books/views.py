@@ -58,13 +58,15 @@ def books_list(request):
     elif request.method == 'POST':
         serializer = BookSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+            new_book = serializer.save()
+            serialized_book = BookSerializer(new_book, context={'request': request})
+            return Response({'response': serialized_book.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def books_detail(request, id):
+    print("ok", id)
     try:
         book = Book.objects.get(id=id)
     except Book.DoesNotExist:
@@ -74,7 +76,7 @@ def books_detail(request, id):
         serializer = BookSerializer(book, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({'response': serializer.data}, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
